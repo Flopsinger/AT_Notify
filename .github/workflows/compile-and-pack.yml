@@ -34,14 +34,29 @@ jobs:
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
           Copy-Item -Path $env:GITHUB_WORKSPACE\AT_AutoMountFeed -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
+      
       - name: Create pak
         run: |
           Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak
-      - name: Upload binaries to release
-        uses: svenstaro/upload-release-action@v2
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: build/AT_AutoMountFeed.pak
-          asset_name: AutoMountFeed Package
-          tag: ${{ github.ref }}
-          overwrite: true
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+      
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./build/AT_AutoMountFeed.pak
+          asset_name: AT_AutoMountFeed.pak
+          asset_content_type: application/zip

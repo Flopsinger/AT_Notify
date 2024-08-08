@@ -24,6 +24,8 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
+        with:
+          lfs: 'true'
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
@@ -34,3 +36,5 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+          echo $GITHUB_WORKSAPCE
+          echo %GITHUB_WORKSPACE%

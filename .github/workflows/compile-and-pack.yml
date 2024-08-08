@@ -34,9 +34,11 @@ jobs:
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
           Copy-Item -Path $env:GITHUB_WORKSPACE\AT_AutoMountFeed -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
-          $LuaFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
+          $LuaFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse | Where-Object {
+            $_.Extension -eq ".lua"
+          }
           $LuaFiles | ForEach-Object {
-            Write-Host $_.FullName
+            Write-Host "Compiling $($_.FullName)"
             Start-Process -FilePath $env:GITHUB_WORKSPACE\buildtools\luajit-2.0.5.exe -ArgumentList "-b $($_.FullName) $($_.FullName)c"
             Start-Sleep -Milliseconds 100
             Remove-Item -Path $_.FullName

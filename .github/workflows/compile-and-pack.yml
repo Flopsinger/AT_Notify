@@ -38,6 +38,7 @@ jobs:
       - name: Create pak
         run: |
           Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak
+          Get-Item -Path $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak
       
       - name: Create Release
         id: create_release

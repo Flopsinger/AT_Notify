@@ -44,7 +44,7 @@ jobs:
             Start-Sleep -Milliseconds 100
             Remove-Item -Path $_.FullName
           }
-          $AllFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
+          $AllFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse
           $AllFiles | ForEach-Object {
             Write-Host $_.FullName
           }

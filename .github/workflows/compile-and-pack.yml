@@ -40,7 +40,7 @@ jobs:
           $LuaFiles | ForEach-Object {
             Write-Host "Compiling $($_.FullName)"
             Set-Location -Path "$env:GITHUB_WORKSPACE\buildtools\"
-            Start-Process -FilePath .\luajit-2.0.5.exe -ArgumentList "-b $($_.FullName) $($_.FullName)c" -Verbose
+            Start-Process -FilePath .\luajit-2.0.5.exe -ArgumentList "-jv -b $($_.FullName) $($_.FullName)c" -Verbose
             Start-Sleep -Milliseconds 100
             Remove-Item -Path $_.FullName
           }

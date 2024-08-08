@@ -38,3 +38,4 @@ jobs:
           echo test, and deploy your project.
           echo $GITHUB_WORKSAPCE
           echo %GITHUB_WORKSPACE%
+          Write-Host $env:GITHUB_WORKSPACE

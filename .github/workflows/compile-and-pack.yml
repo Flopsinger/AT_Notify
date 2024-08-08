@@ -39,7 +39,8 @@ jobs:
           }
           $LuaFiles | ForEach-Object {
             Write-Host "Compiling $($_.FullName)"
-            Start-Process -FilePath $env:GITHUB_WORKSPACE\buildtools\luajit-2.0.5.exe -ArgumentList "-b $($_.FullName) $($_.FullName)c"
+            Set-Location -Path "$env:GITHUB_WORKSPACE\buildtools\"
+            Start-Process -FilePath .\luajit-2.0.5.exe -ArgumentList "-b $($_.FullName) $($_.FullName)c"
             Start-Sleep -Milliseconds 100
             Remove-Item -Path $_.FullName
           }

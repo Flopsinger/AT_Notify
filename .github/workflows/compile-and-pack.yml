@@ -27,24 +27,18 @@ jobs:
         with:
           lfs: 'true'
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          echo $GITHUB_WORKSAPCE
-          echo %GITHUB_WORKSPACE%
-          Write-Host $env:GITHUB_WORKSPACE
-
-      
       - name: Create folder structure
         run: |
           Write-Host "Running in $env:GITHUB_WORKSAPCE"
-          echo test, and deploy your project.
-          echo $GITHUB_WORKSAPCE
-          echo %GITHUB_WORKSPACE%
-          Write-Host $env:GITHUB_WORKSPACE
+          New-Item -Path $env:GITHUB_WORKSPACE\build -ItemType Directory
+          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
+          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
+          Copy-Item -Path $env:GITHUB_WORKSPACE\AT_AutoMountFeed -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
+          $LuaFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
+          $LuaFiles | ForEach-Object {
+            Write-Host $_.FullName
+            Start-Process -FilePath $env:GITHUB_WORKSPACE\buildtools\luajit-2.0.5.exe -ArgumentList "-b $($_.FullName) $($_.FullName)c"
+            Start-Sleep -Milliseconds 100
+            Remove-Item -Path $_.FullName
+          }
+          Get-ChildItem -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse

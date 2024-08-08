@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UIAddon>
+	<Name>AT_AutoMountFeed</Name>
+	<AutoStart>true</AutoStart>
+	<ScriptFileRefs>
+        <Item href="Scripts\AT_AutoMountFeed.lua" />
+	</ScriptFileRefs>
+	<MainFormId>Main</MainFormId>
+	<!--<Forms>
+		<Item>
+			<Id>Main</Id>
+			<Form href="Widgets\MainForm\MainForm.(WidgetForm).xdb" />
+		</Item>
+	</Forms>-->
+	<author>Engam</author>
+	<addon_name>AT_AutoMountFeed</addon_name>
+	<localizedNameFileRef href="name.txt"/>
+	<localizedDescFileRef href="desc.txt"/>
+	<visObjects href="" />
+</UIAddon>

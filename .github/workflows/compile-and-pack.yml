@@ -34,17 +34,6 @@ jobs:
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
           Copy-Item -Path $env:GITHUB_WORKSPACE\AT_AutoMountFeed -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
-          $LuaFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse | Where-Object {
-            $_.Extension -eq ".lua"
-          }
-          $LuaFiles | ForEach-Object {
-            Write-Host "Compiling $($_.FullName)"
-            Set-Location -Path "$env:GITHUB_WORKSPACE\buildtools\"
-            Start-Process -FilePath .\luajit-2.0.5.exe -ArgumentList "-jv -b $($_.FullName) $($_.FullName)c" -Verbose
-            Start-Sleep -Milliseconds 100
-            Remove-Item -Path $_.FullName
-          }
-          $AllFiles = Get-ChildItem -Path $env:GITHUB_WORKSPACE -Recurse
-          $AllFiles | ForEach-Object {
-            Write-Host $_.FullName
-          }
+      - name: Create pak
+        run: |
+          Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak

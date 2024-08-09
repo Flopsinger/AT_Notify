@@ -39,11 +39,20 @@ jobs:
         run: |
           Set-Location -Path $env:GITHUB_WORKSPACE\buildtools
           Start-Process -FilePath ".\luajit-2.0.5.exe" -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.luac"
+
+      - name: Get next version
+        uses: reecetech/version-increment@2024.4.3
+        id: version
+        with:
+          scheme: semver
+          increment: patch
         
       - name: Create pak
+        env:
+          VERSION_NUMBER: ${{ steps.version.outputs.version }}
         run: |
-          Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak
-          Get-Item -Path $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak
+          Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed_$env:VERSION_NUMBER.pak
+          Get-Item -Path "$env:GITHUB_WORKSPACE\build\AT_AutoMountFeed_$env:VERSION_NUMBER.pak"
       
       - name: Create Release
         id: create_release
@@ -51,7 +60,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "autobuild"
+          tag_name: ${{ steps.version.outputs.version }}
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false

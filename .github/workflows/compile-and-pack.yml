@@ -34,7 +34,12 @@ jobs:
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
           New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
           Copy-Item -Path $env:GITHUB_WORKSPACE\AT_AutoMountFeed -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
-      
+
+      - name: Compile lua
+        run: |
+          Set-Location -Path $env:GITHUB_WORKSPACE\buildtools
+          Start-Process -FilePath ".\luajit-2.0.5.exe -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.luac"
+        
       - name: Create pak
         run: |
           Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed.pak

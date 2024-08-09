@@ -38,7 +38,7 @@ jobs:
       - name: Compile lua
         run: |
           Set-Location -Path $env:GITHUB_WORKSPACE\buildtools
-          Start-Process -FilePath ".\luajit-2.0.5.exe -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.luac"
+          Start-Process -FilePath ".\luajit-2.0.5.exe" -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.luac"
         
       - name: Create pak
         run: |

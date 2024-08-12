@@ -75,6 +75,10 @@ jobs:
           asset_path: ./build/AT_AutoMountFeed_${{ steps.version.outputs.version }}.pak
           asset_name: AT_AutoMountFeed_${{ steps.version.outputs.version }}.pak
           asset_content_type: application/zip
+      
+      - name: AT_AutoMountFeed - Clean build folder
+        run: |
+          Remove-Item -Force -Recurse $env:GITHUB_WORKSPACE\build
 
       - name: AT_Notify - Create folder structure
         run: |
@@ -107,3 +111,7 @@ jobs:
           asset_path: ./build/AT_Notify_${{ steps.version.outputs.version }}.pak
           asset_name: AT_Notify_${{ steps.version.outputs.version }}.pak
           asset_content_type: application/zip
+      
+      - name: AT_Notify - Clean build folder
+        run: |
+          Remove-Item -Force -Recurse $env:GITHUB_WORKSPACE\build

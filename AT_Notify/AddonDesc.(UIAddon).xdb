@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<UIAddon>
+	<Name>AT_Notify2</Name>
+	<AutoStart>true</AutoStart>
+	<ScriptFileRefs>
+        <Item href="Scripts\Localization.lua" />
+        <Item href="Scripts\Notify2.lua" />
+	</ScriptFileRefs>
+	<Form href="Widgets/MainForm.(WidgetForm).xdb#xpointer(/WidgetForm)"/>
+	<author>Engam</author>
+	<addon_name>Notify2</addon_name>
+	<localizedNameFileRef href="name.txt"/>
+	<localizedDescFileRef href="desc.txt"/>
+	<visObjects href="" />
+</UIAddon>

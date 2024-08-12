@@ -1,0 +1,1 @@
+Detects chests and other stuff. Based on Notify by Verco. Maintained by Engam

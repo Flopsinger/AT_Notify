@@ -10,6 +10,8 @@ Locales["eng_eu"]["Irene_Fairy"]="Fairy"
 Locales["eng_eu"]["Irene_FairyDust"]="Fairy Dust"
 Locales["eng_eu"]["Laby_Headhunter"]="Headhunter"
 Locales["eng_eu"]["Melting_Player"]="Treasure Hunter"
+Locales["ger"]["Suslanger_Large"]="Large Treasure"
+-- Locales["ger"]["Suslanger_Small"]="Treasure"
 
 
 Locales["ger"]={}
@@ -22,3 +24,5 @@ Locales["ger"]["Irene_Fairy"]="Fee"
 Locales["ger"]["Irene_FairyDust"]="Feenstaub"
 Locales["ger"]["Laby_Headhunter"]="Kopfgeldj\228ger"
 Locales["ger"]["Melting_Player"]="Schatzsucher"
+Locales["ger"]["Suslanger_Large"]="Gro\223er Schatz"
+Locales["ger"]["Suslanger_Small"]="Schatz"

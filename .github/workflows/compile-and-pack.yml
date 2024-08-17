@@ -1,21 +1,15 @@
-# This is a basic workflow to help you get started with Actions
+name: Build AT_Notify
 
-name: Build all Addons
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  Build_AT_AutoMountFeed:
+  build:
     runs-on: windows-latest
 
     steps:
@@ -44,74 +38,32 @@ jobs:
       - name: Checkout Git LFS
         run: git lfs pull
 
-      - name: AT_AutoMountFeed - Create folder structure
+      - name: Create folder structure
         run: |
           Write-Host "Running in $env:GITHUB_WORKSAPCE"
-          New-Item -Path $env:GITHUB_WORKSPACE\build -ItemType Directory
-          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
-          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
-          Copy-Item -Path $env:GITHUB_WORKSPACE\AT_AutoMountFeed -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
-
-      - name: AT_AutoMountFeed - Compile lua
-        run: |
-          Set-Location -Path $env:GITHUB_WORKSPACE\buildtools
-          Start-Process -FilePath ".\luajit-2.0.5.exe" -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.luac"
-
-      - name: AT_AutoMountFeed - Create pak
-        env:
-          VERSION_NUMBER: ${{ steps.version.outputs.version }}
-        run: |
-          Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_AutoMountFeed_$env:VERSION_NUMBER.pak
-          Get-Item -Path "$env:GITHUB_WORKSPACE\build\AT_AutoMountFeed_$env:VERSION_NUMBER.pak"
-      
-      - name: AT_AutoMountFeed - Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION_NUMBER: ${{ steps.version.outputs.version }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: ./build/AT_AutoMountFeed_${{ steps.version.outputs.version }}.pak
-          asset_name: AT_AutoMountFeed_${{ steps.version.outputs.version }}.pak
-          asset_content_type: application/zip
-      
-      - name: AT_AutoMountFeed - Clean build folder
-        run: |
-          Remove-Item -Force -Recurse $env:GITHUB_WORKSPACE\build
-
-      - name: AT_Notify - Create folder structure
-        run: |
-          Write-Host "Running in $env:GITHUB_WORKSAPCE"
-          New-Item -Path $env:GITHUB_WORKSPACE\build -ItemType Directory
-          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods -ItemType Directory
-          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory
+          New-Item -Path $env:GITHUB_WORKSPACE\build\Mods\Addons -ItemType Directory -Force
           Copy-Item -Path $env:GITHUB_WORKSPACE\AT_Notify -Destination $env:GITHUB_WORKSPACE\build\Mods\Addons -Recurse
 
-      - name: AT_Notify - Compile lua
+      - name: Compile lua
         run: |
           Set-Location -Path $env:GITHUB_WORKSPACE\buildtools
-          Start-Process -FilePath ".\luajit-2.0.5.exe" -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_Notify\Scripts\AT_AutoMountFeed.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_AutoMountFeed\Scripts\AT_AutoMountFeed.luac"
+          Start-Process -FilePath ".\luajit-2.0.5.exe" -ArgumentList "-b $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_Notify\Scripts\AT_Notify.lua $env:GITHUB_WORKSPACE\build\Mods\Addons\AT_Notify\Scripts\AT_Notify.luac"
 
-      - name: AT_Notify - Create pak
+      - name: Create pak
         env:
           VERSION_NUMBER: ${{ steps.version.outputs.version }}
         run: |
           Compress-Archive -Path $env:GITHUB_WORKSPACE\build\Mods -Destination $env:GITHUB_WORKSPACE\build\AT_Notify_$env:VERSION_NUMBER.pak
           Get-Item -Path "$env:GITHUB_WORKSPACE\build\AT_Notify_$env:VERSION_NUMBER.pak"
       
-      - name: AT_Notify - Upload Release Asset
-        id: upload-release-asset2 
+      - name: Upload Release Asset
+        id: upload-release-asset 
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION_NUMBER: ${{ steps.version.outputs.version }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./build/AT_Notify_${{ steps.version.outputs.version }}.pak
           asset_name: AT_Notify_${{ steps.version.outputs.version }}.pak
           asset_content_type: application/zip
-      
-      - name: AT_Notify - Clean build folder
-        run: |
-          Remove-Item -Force -Recurse $env:GITHUB_WORKSPACE\build
